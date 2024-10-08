@@ -8,7 +8,7 @@ typedef struct Stack{
 };
 
 //function prototypes
-void init();
+void init(struct Stack *stack);
 bool isEmpty(struct Stack *stack);
 bool isFull(struct Stack *stack);
 void push(struct Stack *stack, struct NFA *nfa);
