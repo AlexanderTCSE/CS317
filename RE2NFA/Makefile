@@ -11,4 +11,4 @@ nfa.o: nfa.c
 	gcc -g -c nfa.c
 
 clean:
-	rm -f RE2NFA main.o stack.o
+	rm -f RE2NFA main.o stack.o nfa.o

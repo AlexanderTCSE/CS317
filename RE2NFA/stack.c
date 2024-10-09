@@ -8,12 +8,12 @@
 
 //Initialize an empty stack
 void init(struct Stack *stack){
-    stack -> top = NULL;
+    stack -> top = -1;
 }
 
 //Check if stack is empty, return boolean T/F
 bool isEmpty(struct Stack *stack){
-    return stack->top == NULL;
+    return stack->top == -1;
 }
 
 //Check if stack is full, return boolean T/F
@@ -27,22 +27,20 @@ void push(struct Stack *stack, struct NFA *nfa){
         printf("Stack Overflow\n");
         return;
     }
-    stack -> arr[++stack->top] = nfa;
+    stack -> arr[++stack->top] = nfa;	//increment top and add pointer to NFA
 }
 
 //Pop the top element of the stack
-int pop(struct Stack *stack){
+struct NFA *pop(struct Stack *stack){
     if(isEmpty(stack)){
         printf("Stack Underflow\n");
-        return;
+        return NULL;
     }
-    int popped = stack->arr[stack->top];
-    stack->top--;
-    return popped;
+    return stack->arr[stack->top--];	//return top element and decrement
 }
 
 //Peek at the top element of the stack
-int peek(struct Stack *stack){
+struct NFA *peek(struct Stack *stack){
     if(isEmpty(stack)){
         printf("Stack Empty\n");
         return NULL;
