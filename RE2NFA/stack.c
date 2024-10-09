@@ -8,12 +8,12 @@
 
 //Initialize an empty stack
 void init(struct Stack *stack){
-    stack -> top = -1;
+    stack -> top = NULL;
 }
 
 //Check if stack is empty, return boolean T/F
 bool isEmpty(struct Stack *stack){
-    return stack->top == -1;
+    return stack->top == NULL;
 }
 
 //Check if stack is full, return boolean T/F
@@ -45,7 +45,7 @@ int pop(struct Stack *stack){
 int peek(struct Stack *stack){
     if(isEmpty(stack)){
         printf("Stack Empty\n");
-        return -1;
+        return NULL;
     }
     return stack->arr[stack->top];
 }
