@@ -16,7 +16,7 @@ class Transition:
 
     def __repr__(self):
         # Format the transition for output
-        return f"({self.state1}, {'E' if self.symbol == '' else self.symbol}) → {self.state2}"
+        return f"({self.state1}, {'E' if self.symbol == '' else self.symbol}) -> {self.state2}"
 
 
 def readFile():
@@ -44,7 +44,7 @@ def parseExpression(expression):
     language = set('abcde') #valid language
     stateCount = 1          #counter for state names
 
-    #outpute RE
+    #outpute RE first
     print(f"RE: {expression}")
 
     #begin evaluating expression
@@ -68,14 +68,14 @@ def parseExpression(expression):
 
             #actual evaluations begin here
             if char == '|': #Union OR operator
-                operand2 = stack.pop()
+                operand2 = stack.pop() #push top 2 elements of stack
                 operand1 = stack.pop()
-                result = NFA(f'q{stateCount}', f'q{stateCount+1}', [])
-                result.transitions.append(Transition(result.start, operand1.start, '')) # Epsilon transition
+                result = NFA(f'q{stateCount}', f'q{stateCount+1}', []) #create resultant NFA
+                result.transitions.append(Transition(result.start, operand1.start, '')) #Epsilon transitions
                 result.transitions.append(Transition(result.start, operand2.start, ''))
-                result.transitions.extend(operand1.transitions) # Add operand1 transitions
-                result.transitions.extend(operand2.transitions) # Add operand2 transitions
-                result.transitions.append(Transition(operand1.accept, result.accept, ''))
+                result.transitions.extend(operand1.transitions) #Add operand1 transitions
+                result.transitions.extend(operand2.transitions) #Add operand2 transitions
+                result.transitions.append(Transition(operand1.accept, result.accept, ''))   #Epsilon transitions to accept state
                 result.transitions.append(Transition(operand2.accept, result.accept, ''))
                 stack.append(result)
                 stateCount += 2
@@ -83,12 +83,12 @@ def parseExpression(expression):
             elif char == '&': #Intersection AND operator
                 operand2 = stack.pop()
                 operand1 = stack.pop() 
-                result = NFA(f'q{stateCount}', operand2.accept, [])
-                result.transitions.extend(operand1.transitions) # Add operand1 transitions
-                result.transitions.append(Transition(operand1.accept, operand2.start, ''))
-                result.transitions.extend(operand2.transitions) # Add operand2 transitions
-                stack.append(result) # Push the resulting NFA onto the stack 
-                stateCount += 2
+                result = NFA(operand1.start, operand2.accept, [])
+                result.transitions.extend(operand1.transitions) #Add operand1 transitions
+                result.transitions.append(Transition(operand1.accept, operand2.start, ''))  #epsilon from op1's accept to op2's start
+                result.transitions.extend(operand2.transitions) #Add operand2 transitions
+                stack.append(result) #Push the resulting NFA onto the stack 
+                #stateCount += 1
                 
             elif char == '*': #Kleene star operator
                 if len(stack) < 1:
@@ -98,8 +98,7 @@ def parseExpression(expression):
                 result = NFA(f'q{stateCount}', f'q{stateCount}', []) # New NFA for the result
                 result.transitions.append(Transition(result.start, operand.start, '')) # Epsilon transition
                 result.transitions.extend(operand.transitions) # Add operand transitions
-                result.transitions.append(Transition(operand.accept, result.start, ''))
-                result.transitions.append(Transition(result.start, f'q{stateCount+1}', ''))
+                result.transitions.append(Transition(operand.accept, result.start, '')) 
                 stack.append(result) # Push the resulting NFA onto the stack
                 stateCount += 1
                 
@@ -114,7 +113,9 @@ def parseExpression(expression):
         print(f"Start: {final_nfa.start}")    # Output the Start state
         print(f"Accept: {final_nfa.accept}")  # Output the Accept state
         # Sort transitions and print them
-        sorted_transitions = sorted(final_nfa.transitions, key=lambda t: (t.state1, t.symbol, t.state2))
+        def state_key(transition):
+            return(int(transition.state1[1:]),transition.symbol,int(transition.state2[1:]))
+        sorted_transitions = sorted(final_nfa.transitions, key=state_key)
         for transition in sorted_transitions:
             print(transition)  # Print each transition
 
@@ -123,7 +124,7 @@ def processLines():
     lines = readFile()
     for line in lines:
         expression = line.strip()
-        print(f"Evaluating: {expression}")
+        #print(f"Evaluating: {expression}")
         parseExpression(expression)
         print()
 
