@@ -1,13 +1,7 @@
-RE2NFA: A postfix regular expression validation program
-AUTHOR: Alexander Tattersall
-EMAIL: a.tattersall@wsu.edu
-FILES:
-    main.c  - main driver method
-    nfa.c   - code to handle nfa memory manipulation
-    nfa.h   - definitions of nfa structures
-    stack.c - code to handle stack data and memory
-    stack.h - definitions of stack structures
-COMPILER VERSION: 
-COMPILE INSTRUCTIONS: run "make" from folder containing all project files
-RUN INSTRUCTIONS: run "RE2NFA <input>" where input is a text file containing a list of regular expressions in postfix form.
-
+RE2NFA: 		A postfix regular expression validation program
+AUTHOR: 		Alexander Tattersall
+EMAIL: 			a.tattersall@wsu.edu
+FILES: 			RE2NFA.py - main python file which runs the program by parsing line-by-line and char-by-char
+COMPILER VERSION:  	Python 3.12.3
+COMPILE INSTRUCTIONS: 	N/A
+RUN INSTRUCTIONS: 	run "python3 RE2NFA.py <input>" where input is a text file containing a list of regular expressions in postfix form.
